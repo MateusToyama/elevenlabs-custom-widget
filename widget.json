@@ -38,6 +38,30 @@
     "step": 1,
     "group": "ElevenLabs"
   },
+  "alertVideo": {
+    "type": "video-input",
+    "label": "Video",
+    "group": "Alert"
+  },
+  "alertMessage": {
+    "type": "text",
+    "label": "Message:",
+    "value": "<span class=\"highlight\">{name}</span> superchatted <span class=\"highlight\">${amount}</span>!",
+    "mode": "textarea",
+    "group": "Alert"
+  },
+  "alertInterval": {
+    "type": "number",
+    "label": "Interval between alerts (seconds):",
+    "value": 3,
+    "group": "Alert"
+  },
+  "enableTTS": {
+    "type": "checkbox",
+    "label": "Enable",
+    "value": true,
+    "group": "TTS"
+  },
   "minAmountTTS": {
     "type": "number",
     "label": "Minimum amount to trigger TTS:",
@@ -53,10 +77,8 @@
     "step": 1,
     "group": "TTS"
   },
-  "minIntervalBetweenTTS": {
-    "type": "number",
-    "label": "Minimum interval between TTS (seconds):",
-    "value": 5,
-    "group": "TTS"
+  "widgetName": {
+    "type": "hidden",
+    "value": "ElevenLabs TTS"
   }
 }
