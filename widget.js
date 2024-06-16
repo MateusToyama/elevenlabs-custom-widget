@@ -4,13 +4,19 @@ const fieldData = {
   elevenLabsVoiceStability: 50,
   elevenLabsVoiceSimilarity: 50,
   elevenLabsVoiceStyleExaggeration: 0,
+  alertInterval: 3,
+  alertMessage: '<span class="highlight">{name}</span> superchatted <span class="highlight">${amount}</span>!',
+  enableTTS: true,
   minAmountTTS: 5,
-  minIntervalBetweenTTS: 5,
   volumeTTS: 50
 };
 const alertsQueue = [];
 
 let alertPlaying = false;
+let alertVideo = null;
+let alertVideoResolveFn = () => {};
+let alertVideoRejectFn = () => {};
+let alertText = null;
 
 const newAlert = (alert) => {
   alertsQueue.push(alert);
@@ -27,24 +33,51 @@ const playNextAlert = async () => {
   const alert = alertsQueue[0];
   alertsQueue.splice(0, 1);
 
-  let wait = true;
   try {
-    wait = await playAlert(alert);
+    await playAlert(alert);
   } catch (e) {
-    console.error('Error playing alert', e);
+    console.error('Error playing alert', JSON.stringify(e));
   }
 
-  const delay = wait ? fieldData.minIntervalBetweenTTS * 1000 : 0;
-
-  setTimeout(() => {
-    alertPlaying = false;
-    playNextAlert();
-  }, delay);
+  await sleep(fieldData.alertInterval * 1000);
+  alertPlaying = false;
+  playNextAlert();
 };
 
-const playAlert = async ({ message, amount }) => {
-  if (!message || amount < fieldData.minAmountTTS) {
-    return false;
+const playAlert = async ({ displayName, message, amount }) => {
+  alertVideo.style.display = 'block';
+  alertText.innerHTML = fieldData.alertMessage
+    .replaceAll('{name}', displayName)
+    .replaceAll('{amount}', amount);
+  alertText.style.display = 'block';
+
+  const promises = [playVideo(), playTTS({ message, amount })];
+  const result = await Promise.allSettled(promises);
+
+  alertVideo.style.display = 'none';
+  alertText.style.display = 'none';
+
+  const errors = result.filter((r) => r.status === 'rejected');
+  if (errors.length > 0) {
+    throw new Error(errors);
+  }
+};
+
+const playVideo = async () => {
+  return new Promise((resolve, reject) => {
+    alertVideo.pause();
+    alertVideo.currentTime = 0;
+
+    alertVideoResolveFn = resolve;
+    alertVideoRejectFn = reject;
+
+    alertVideo.play();
+  });
+};
+
+const playTTS = async ({ message, amount }) => {
+  if (!fieldData.enableTTS || !message || amount < fieldData.minAmountTTS) {
+    return;
   }
 
   const body = {
@@ -75,8 +108,6 @@ const playAlert = async ({ message, amount }) => {
   const objectURL = URL.createObjectURL(blob);
   await playAudio(objectURL);
   URL.revokeObjectURL(objectURL);
-
-  return true;
 };
 
 const playAudio = async (url) => {
@@ -89,10 +120,19 @@ const playAudio = async (url) => {
   });
 };
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 window.addEventListener('onWidgetLoad', (obj) => {
   for (const key in obj.detail.fieldData) {
     fieldData[key] = obj.detail.fieldData[key];
   }
+
+  alertVideo = document.getElementById('alertVideo');
+  alertVideo.addEventListener('ended', (e) => alertVideoResolveFn(e));
+  alertVideo.addEventListener('error', (e) => alertVideoRejectFn(e));
+
+  alertText = document.getElementById('alertText');
+  alertText.style.display = 'none';
 });
 
 window.addEventListener('onEventReceived', (obj) => {
@@ -109,8 +149,8 @@ window.addEventListener('onEventReceived', (obj) => {
 
   switch (listener) {
     case 'superchat':
-      const { message, amount } = event;
-      newAlert({ message, amount });
+      const { displayName, message, amount } = event;
+      newAlert({ displayName, message, amount });
       break;
   }
 });
