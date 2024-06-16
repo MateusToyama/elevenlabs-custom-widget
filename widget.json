@@ -1,0 +1,62 @@
+{
+  "elevenLabsApiKey": {
+    "type": "password",
+    "label": "API Key:",
+    "value": "",
+    "group": "ElevenLabs"
+  },
+  "elevenLabsVoiceId": {
+    "type": "text",
+    "label": "Voice ID:",
+    "value": "21m00Tcm4TlvDq8ikWAM",
+    "group": "ElevenLabs"
+  },
+  "elevenLabsVoiceStability": {
+    "type": "slider",
+    "label": "Voice Stability (%):",
+    "value": 50,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "group": "ElevenLabs"
+  },
+  "elevenLabsVoiceSimilarity": {
+    "type": "slider",
+    "label": "Voice Similarity (%):",
+    "value": 50,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "group": "ElevenLabs"
+  },
+  "elevenLabsVoiceStyleExaggeration": {
+    "type": "slider",
+    "label": "Voice Style Exaggeration (%):",
+    "value": 0,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "group": "ElevenLabs"
+  },
+  "minAmountTTS": {
+    "type": "number",
+    "label": "Minimum amount to trigger TTS:",
+    "value": 5,
+    "group": "TTS"
+  },
+  "volumeTTS": {
+    "type": "slider",
+    "label": "Volume (%):",
+    "value": 50,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "group": "TTS"
+  },
+  "minIntervalBetweenTTS": {
+    "type": "number",
+    "label": "Minimum interval between TTS (seconds):",
+    "value": 5,
+    "group": "TTS"
+  }
+}
