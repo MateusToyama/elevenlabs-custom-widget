@@ -5,7 +5,7 @@ const fieldData = {
   elevenLabsVoiceSimilarity: 50,
   elevenLabsVoiceStyleExaggeration: 0,
   alertMessage:
-    '<span class="name">{name}</span> superchatted <span class="amount">${amount}</span>!',
+    '<span class="alert-text-highlight">{name}</span> superchatted <span class="alert-text-highlight">${amount}</span>!',
   alertInterval: 3,
   enableTTS: true,
   minAmountTTS: 5,

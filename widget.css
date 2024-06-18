@@ -32,12 +32,7 @@
   margin-top: -50px;
 }
 
-.name {
-  display: inline-block;
-  color: rgb(106, 111, 252);
-}
-
-.amount {
+.alert-text-highlight {
   display: inline-block;
   color: rgb(106, 111, 252);
 }
