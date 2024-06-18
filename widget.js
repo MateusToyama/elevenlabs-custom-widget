@@ -5,7 +5,8 @@ const fieldData = {
   elevenLabsVoiceSimilarity: 50,
   elevenLabsVoiceStyleExaggeration: 0,
   alertInterval: 3,
-  alertMessage: '<span class="highlight">{name}</span> superchatted <span class="highlight">${amount}</span>!',
+  alertMessage:
+    '<span class="name">{name}</span> superchatted <span class="amount">${amount}</span>!',
   enableTTS: true,
   minAmountTTS: 5,
   volumeTTS: 50
@@ -127,11 +128,11 @@ window.addEventListener('onWidgetLoad', (obj) => {
     fieldData[key] = obj.detail.fieldData[key];
   }
 
-  alertVideo = document.getElementById('alertVideo');
+  alertVideo = document.getElementById('alert-video');
   alertVideo.addEventListener('ended', (e) => alertVideoResolveFn(e));
   alertVideo.addEventListener('error', (e) => alertVideoRejectFn(e));
 
-  alertText = document.getElementById('alertText');
+  alertText = document.getElementById('alert-text');
   alertText.style.display = 'none';
 });
 

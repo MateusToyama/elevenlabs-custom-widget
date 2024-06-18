@@ -1,8 +1,4 @@
-body {
-  margin: 0;
-}
-
-#container {
+.alert-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,18 +6,23 @@ body {
   height: 100%;
 }
 
-#video-container {
+.video-container {
   height: 100%;
   max-height: 60%;
   max-width: 100%;
 }
 
-#text-container {
+.alert-video {
+  height: 100%;
+  max-height: 100%;
+}
+
+.text-container {
   width: 100%;
   max-width: 100%;
 }
 
-#text-container pre {
+.alert-text {
   font-family: Nunito;
   font-size: 30px;
   color: rgb(255, 255, 255);
@@ -31,12 +32,12 @@ body {
   margin-top: -50px;
 }
 
-.highlight {
+.name {
   display: inline-block;
   color: rgb(106, 111, 252);
 }
 
-#alertVideo {
-  height: 100%;
-  max-height: 100%;
+.amount {
+  display: inline-block;
+  color: rgb(106, 111, 252);
 }

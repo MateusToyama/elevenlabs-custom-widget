@@ -46,7 +46,7 @@
   "alertMessage": {
     "type": "text",
     "label": "Message:",
-    "value": "<span class=\"highlight\">{name}</span> superchatted <span class=\"highlight\">${amount}</span>!",
+    "value": "<span class=\"name\">{name}</span> superchatted <span class=\"amount\">${amount}</span>!",
     "mode": "textarea",
     "group": "Alert"
   },
