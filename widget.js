@@ -14,6 +14,7 @@ const fieldData = {
 const alertsQueue = [];
 
 let alertPlaying = false;
+let alertElement = null;
 let alertVideo = null;
 let alertVideoResolveFn = () => {};
 let alertVideoRejectFn = () => {};
@@ -46,17 +47,25 @@ const playNextAlert = async () => {
 };
 
 const playAlert = async ({ displayName, message, amount }) => {
-  alertVideo.style.display = 'block';
   alertText.innerHTML = fieldData.alertMessage
     .replaceAll('{name}', displayName)
     .replaceAll('{amount}', amount);
-  alertText.style.display = 'block';
+
+  alertElement.classList.remove('alert-out');
+  alertElement.classList.add('alert-in');
+  alertElement.style.display = 'block';
 
   const promises = [playVideo(), playTTS({ message, amount })];
   const result = await Promise.allSettled(promises);
 
-  alertVideo.style.display = 'none';
-  alertText.style.display = 'none';
+  alertElement.classList.remove('alert-in');
+  alertElement.classList.add('alert-out');
+
+  const animations = alertElement.getAnimations();
+  if (animations.length === 0) {
+    alertElement.classList.remove('alert-out');
+    alertElement.style.display = 'none';
+  }
 
   const errors = result.filter((r) => r.status === 'rejected');
   if (errors.length > 0) {
@@ -128,12 +137,23 @@ window.addEventListener('onWidgetLoad', (obj) => {
     fieldData[key] = obj.detail.fieldData[key];
   }
 
+  alertElement = document.getElementById('alert');
+  alertElement.style.display = 'none';
+  alertElement.addEventListener('animationend', (e) => {
+    if (
+      e.target.classList.contains('alert-out') &&
+      e.target.getAnimations().length === 0
+    ) {
+      e.target.classList.remove('alert-out');
+      e.target.style.display = 'none';
+    }
+  });
+
   alertVideo = document.getElementById('alert-video');
   alertVideo.addEventListener('ended', (e) => alertVideoResolveFn(e));
   alertVideo.addEventListener('error', (e) => alertVideoRejectFn(e));
 
   alertText = document.getElementById('alert-text');
-  alertText.style.display = 'none';
 
   const style = document.createElement('style');
   style.innerHTML = obj.detail.fieldData.alertCustomCss;
