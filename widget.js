@@ -46,9 +46,10 @@ const playNextAlert = async () => {
   playNextAlert();
 };
 
-const playAlert = async ({ displayName, message, amount }) => {
+const playAlert = async ({ name, displayName, message, amount }) => {
   alertText.innerHTML = fieldData.alertMessage
-    .replaceAll('{name}', displayName)
+    .replaceAll('{name}', name)
+    .replaceAll('{displayName}', displayName)
     .replaceAll('{amount}', amount);
 
   alertElement.classList.remove('alert-out');
@@ -180,8 +181,8 @@ window.addEventListener('onEventReceived', (obj) => {
 
   switch (listener) {
     case 'superchat':
-      const { displayName, message, amount } = event;
-      newAlert({ displayName, message, amount });
+      const { name, displayName, message, amount } = event;
+      newAlert({ name, displayName, message, amount });
       break;
   }
 });
