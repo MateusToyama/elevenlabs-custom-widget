@@ -158,6 +158,12 @@ window.addEventListener('onWidgetLoad', (obj) => {
   const style = document.createElement('style');
   style.innerHTML = obj.detail.fieldData.alertCustomCss;
   document.head.appendChild(style);
+
+  const isEditorMode = obj.detail.overlay.isEditorMode;
+  if (isEditorMode) {
+    alertText.innerHTML = fieldData.alertMessage;
+    alertElement.style.display = 'block';
+  }
 });
 
 window.addEventListener('onEventReceived', (obj) => {
