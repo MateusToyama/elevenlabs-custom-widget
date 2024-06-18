@@ -4,9 +4,9 @@ const fieldData = {
   elevenLabsVoiceStability: 50,
   elevenLabsVoiceSimilarity: 50,
   elevenLabsVoiceStyleExaggeration: 0,
-  alertInterval: 3,
   alertMessage:
     '<span class="name">{name}</span> superchatted <span class="amount">${amount}</span>!',
+  alertInterval: 3,
   enableTTS: true,
   minAmountTTS: 5,
   volumeTTS: 50
@@ -134,6 +134,10 @@ window.addEventListener('onWidgetLoad', (obj) => {
 
   alertText = document.getElementById('alert-text');
   alertText.style.display = 'none';
+
+  const style = document.createElement('style');
+  style.innerHTML = obj.detail.fieldData.alertCustomCss;
+  document.head.appendChild(style);
 });
 
 window.addEventListener('onEventReceived', (obj) => {

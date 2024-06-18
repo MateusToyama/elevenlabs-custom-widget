@@ -56,6 +56,13 @@
     "value": 3,
     "group": "Alert"
   },
+  "alertCustomCss": {
+    "type": "text",
+    "label": "Custom CSS:",
+    "value": "",
+    "mode": "textarea",
+    "group": "Alert"
+  },
   "enableTTS": {
     "type": "checkbox",
     "label": "Enable",
