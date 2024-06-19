@@ -50,7 +50,8 @@ const playAlert = async ({ name, displayName, message, amount }) => {
   alertText.innerHTML = fieldData.alertMessage
     .replaceAll('{name}', name)
     .replaceAll('{displayName}', displayName)
-    .replaceAll('{amount}', amount);
+    .replaceAll('{amount}', amount)
+    .replaceAll('{message}', message || '');
 
   alertElement.classList.remove('alert-out');
   alertElement.classList.add('alert-in');
