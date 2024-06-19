@@ -46,7 +46,7 @@
   "alertMessage": {
     "type": "text",
     "label": "Message:",
-    "value": "<span class=\"highlight\">{name}</span> superchatted <span class=\"highlight\">${amount}</span>!",
+    "value": "<span class=\"alert-text-highlight\">{name}</span> superchatted <span class=\"alert-text-highlight\">${amount}</span>!",
     "mode": "textarea",
     "group": "Alert"
   },
@@ -54,6 +54,13 @@
     "type": "number",
     "label": "Interval between alerts (seconds):",
     "value": 3,
+    "group": "Alert"
+  },
+  "alertCustomCss": {
+    "type": "text",
+    "label": "Custom CSS:",
+    "value": "@import url(https://fonts.googleapis.com/css?family=Nunito);.alert-container{display:flex;flex-direction:column;align-items:center;width:100%;height:100%}.video-container{height:100%;max-height:60%;max-width:100%}.alert-video{height:100%;max-height:100%}.text-container{width:100%;max-width:100%}.alert-text{font-family:Nunito;font-size:30px;color:#fff;font-weight:700;text-shadow:rgba(0,0,0,.8) 1px 1px 1px;text-align:center;margin-top:-50px}.alert-text-highlight{display:inline-block;color:#6a6ffc}",
+    "mode": "textarea",
     "group": "Alert"
   },
   "enableTTS": {

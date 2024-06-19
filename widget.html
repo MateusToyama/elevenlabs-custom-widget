@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-</head>
-
-<body>
-  <div id="container">
-    <div id="video-container">
-      <video id="alertVideo" src="{{alertVideo}}" preload></video>
+<div id="alert" class="alert">
+  <div id="alert-container" class="alert-container">
+    <div id="video-container" class="video-container">
+      <video id="alert-video" class="alert-video" src="{{alertVideo}}" preload="auto"></video>
     </div>
-    <div id="text-container">
-      <pre id="alertText"></pre>
+    <div id="text-container" class="text-container">
+      <div id="alert-text" class="alert-text"></div>
     </div>
   </div>
-</body>
-
-</html>
+</div>

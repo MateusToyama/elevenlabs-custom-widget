@@ -4,8 +4,9 @@ const fieldData = {
   elevenLabsVoiceStability: 50,
   elevenLabsVoiceSimilarity: 50,
   elevenLabsVoiceStyleExaggeration: 0,
+  alertMessage:
+    '<span class="alert-text-highlight">{name}</span> superchatted <span class="alert-text-highlight">${amount}</span>!',
   alertInterval: 3,
-  alertMessage: '<span class="highlight">{name}</span> superchatted <span class="highlight">${amount}</span>!',
   enableTTS: true,
   minAmountTTS: 5,
   volumeTTS: 50
@@ -13,6 +14,7 @@ const fieldData = {
 const alertsQueue = [];
 
 let alertPlaying = false;
+let alertElement = null;
 let alertVideo = null;
 let alertVideoResolveFn = () => {};
 let alertVideoRejectFn = () => {};
@@ -44,18 +46,28 @@ const playNextAlert = async () => {
   playNextAlert();
 };
 
-const playAlert = async ({ displayName, message, amount }) => {
-  alertVideo.style.display = 'block';
+const playAlert = async ({ name, displayName, message, amount }) => {
   alertText.innerHTML = fieldData.alertMessage
-    .replaceAll('{name}', displayName)
-    .replaceAll('{amount}', amount);
-  alertText.style.display = 'block';
+    .replaceAll('{name}', name)
+    .replaceAll('{displayName}', displayName)
+    .replaceAll('{amount}', amount)
+    .replaceAll('{message}', message || '');
+
+  alertElement.classList.remove('alert-out');
+  alertElement.classList.add('alert-in');
+  alertElement.style.display = 'block';
 
   const promises = [playVideo(), playTTS({ message, amount })];
   const result = await Promise.allSettled(promises);
 
-  alertVideo.style.display = 'none';
-  alertText.style.display = 'none';
+  alertElement.classList.remove('alert-in');
+  alertElement.classList.add('alert-out');
+
+  const animations = alertElement.getAnimations();
+  if (animations.length === 0) {
+    alertElement.classList.remove('alert-out');
+    alertElement.style.display = 'none';
+  }
 
   const errors = result.filter((r) => r.status === 'rejected');
   if (errors.length > 0) {
@@ -127,12 +139,33 @@ window.addEventListener('onWidgetLoad', (obj) => {
     fieldData[key] = obj.detail.fieldData[key];
   }
 
-  alertVideo = document.getElementById('alertVideo');
+  alertElement = document.getElementById('alert');
+  alertElement.style.display = 'none';
+  alertElement.addEventListener('animationend', (e) => {
+    if (
+      e.target.classList.contains('alert-out') &&
+      e.target.getAnimations().length === 0
+    ) {
+      e.target.classList.remove('alert-out');
+      e.target.style.display = 'none';
+    }
+  });
+
+  alertVideo = document.getElementById('alert-video');
   alertVideo.addEventListener('ended', (e) => alertVideoResolveFn(e));
   alertVideo.addEventListener('error', (e) => alertVideoRejectFn(e));
 
-  alertText = document.getElementById('alertText');
-  alertText.style.display = 'none';
+  alertText = document.getElementById('alert-text');
+
+  const style = document.createElement('style');
+  style.innerHTML = obj.detail.fieldData.alertCustomCss;
+  document.head.appendChild(style);
+
+  const isEditorMode = obj.detail.overlay.isEditorMode;
+  if (isEditorMode) {
+    alertText.innerHTML = fieldData.alertMessage;
+    alertElement.style.display = 'block';
+  }
 });
 
 window.addEventListener('onEventReceived', (obj) => {
@@ -149,8 +182,8 @@ window.addEventListener('onEventReceived', (obj) => {
 
   switch (listener) {
     case 'superchat':
-      const { displayName, message, amount } = event;
-      newAlert({ displayName, message, amount });
+      const { name, displayName, message, amount } = event;
+      newAlert({ name, displayName, message, amount });
       break;
   }
 });
