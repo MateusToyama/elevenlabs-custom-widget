@@ -5,10 +5,11 @@
     "value": "",
     "group": "ElevenLabs"
   },
-  "elevenLabsVoiceId": {
+  "elevenLabsVoiceIds": {
     "type": "text",
-    "label": "Voice ID:",
-    "value": "21m00Tcm4TlvDq8ikWAM",
+    "label": "Voice IDs (one per line):",
+    "value": "21m00Tcm4TlvDq8ikWAM\npNInz6obpgDQGcFmaJgB",
+    "mode": "textarea",
     "group": "ElevenLabs"
   },
   "elevenLabsVoiceStability": {

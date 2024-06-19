@@ -1,6 +1,6 @@
 const fieldData = {
   elevenLabsApiKey: '',
-  elevenLabsVoiceId: '21m00Tcm4TlvDq8ikWAM',
+  elevenLabsVoiceIds: '21m00Tcm4TlvDq8ikWAM\npNInz6obpgDQGcFmaJgB',
   elevenLabsVoiceStability: 50,
   elevenLabsVoiceSimilarity: 50,
   elevenLabsVoiceStyleExaggeration: 0,
@@ -12,6 +12,7 @@ const fieldData = {
   volumeTTS: 50
 };
 const alertsQueue = [];
+const voiceIds = [];
 
 let alertPlaying = false;
 let alertElement = null;
@@ -111,8 +112,10 @@ const playTTS = async ({ message, amount }) => {
     body: JSON.stringify(body)
   };
 
+  const voiceId = getRandomItem(voiceIds);
+
   const response = await fetch(
-    `https://api.elevenlabs.io/v1/text-to-speech/${fieldData.elevenLabsVoiceId}`,
+    `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
     options
   );
 
@@ -138,6 +141,13 @@ window.addEventListener('onWidgetLoad', (obj) => {
   for (const key in obj.detail.fieldData) {
     fieldData[key] = obj.detail.fieldData[key];
   }
+
+  voiceIds.push(
+    ...fieldData.elevenLabsVoiceIds
+      .replaceAll('\r\n', '\n')
+      .split('\n')
+      .filter(Boolean)
+  );
 
   alertElement = document.getElementById('alert');
   alertElement.style.display = 'none';
@@ -187,3 +197,12 @@ window.addEventListener('onEventReceived', (obj) => {
       break;
   }
 });
+
+const getRandomItem = (array) => {
+  if (array.length === 0) {
+    return null;
+  }
+
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
+};
