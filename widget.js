@@ -48,11 +48,14 @@ const playNextAlert = async () => {
 };
 
 const playAlert = async ({ name, displayName, message, amount }) => {
+  const messageContainer = document.createElement('span');
+  messageContainer.innerText = message || '';
+
   alertText.innerHTML = fieldData.alertMessage
     .replaceAll('{name}', name)
     .replaceAll('{displayName}', displayName)
     .replaceAll('{amount}', amount)
-    .replaceAll('{message}', message || '');
+    .replaceAll('{message}', messageContainer.innerHTML);
 
   alertElement.classList.remove('alert-out');
   alertElement.classList.add('alert-in');
